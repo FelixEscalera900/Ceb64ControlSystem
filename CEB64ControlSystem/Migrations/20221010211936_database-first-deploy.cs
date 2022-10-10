@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CEB64ControlSystem.Migrations
 {
-    public partial class db_first_release : Migration
+    public partial class databasefirstdeploy : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -256,26 +256,6 @@ namespace CEB64ControlSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BlogImages",
-                columns: table => new
-                {
-                    GrupoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SemestreID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BlogImages", x => x.GrupoId);
-                    table.ForeignKey(
-                        name: "FK_BlogImages_Blogs_SemestreID",
-                        column: x => x.SemestreID,
-                        principalTable: "Blogs",
-                        principalColumn: "SemestreId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Evaluacion",
                 columns: table => new
                 {
@@ -293,6 +273,33 @@ namespace CEB64ControlSystem.Migrations
                         principalTable: "EvaluacionCategoria",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Grupo",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PeriodoId = table.Column<int>(type: "int", nullable: false),
+                    GrupoId = table.Column<int>(type: "int", nullable: false),
+                    SemestreID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Grupo", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Grupo_Blogs_SemestreID",
+                        column: x => x.SemestreID,
+                        principalTable: "Blogs",
+                        principalColumn: "SemestreId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Grupo_Periodo_PeriodoId",
+                        column: x => x.PeriodoId,
+                        principalTable: "Periodo",
+                        principalColumn: "PeriodoId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -361,29 +368,77 @@ namespace CEB64ControlSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Grupo_Periodos",
+                name: "Alumno",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PeriodoId = table.Column<int>(type: "int", nullable: false),
-                    GrupoId = table.Column<int>(type: "int", nullable: false)
+                    FechaNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaIngreso = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaEgreso = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    GrupoId = table.Column<int>(type: "int", nullable: true),
+                    SemestreId = table.Column<int>(type: "int", nullable: false),
+                    IdEstado = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApellidoPaterno = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApellidoMaterno = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumeroTelefonico = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Grupo_Periodos", x => x.id);
+                    table.PrimaryKey("PK_Alumno", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Grupo_Periodos_BlogImages_GrupoId",
+                        name: "FK_Alumno_AlumnoEstado_IdEstado",
+                        column: x => x.IdEstado,
+                        principalTable: "AlumnoEstado",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Alumno_Blogs_SemestreId",
+                        column: x => x.SemestreId,
+                        principalTable: "Blogs",
+                        principalColumn: "SemestreId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Alumno_Grupo_GrupoId",
                         column: x => x.GrupoId,
-                        principalTable: "BlogImages",
-                        principalColumn: "GrupoId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalTable: "Grupo",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Asignatura",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GrupoId = table.Column<int>(type: "int", nullable: false),
+                    ProfesorID = table.Column<int>(type: "int", nullable: false),
+                    MateriaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Asignatura", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Grupo_Periodos_Periodo_PeriodoId",
-                        column: x => x.PeriodoId,
-                        principalTable: "Periodo",
-                        principalColumn: "PeriodoId",
-                        onDelete: ReferentialAction.Restrict);
+                        name: "FK_Asignatura_Grupo_GrupoId",
+                        column: x => x.GrupoId,
+                        principalTable: "Grupo",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Asignatura_Materia_MateriaId",
+                        column: x => x.MateriaId,
+                        principalTable: "Materia",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Asignatura_Profesor_ProfesorID",
+                        column: x => x.ProfesorID,
+                        principalTable: "Profesor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -429,80 +484,6 @@ namespace CEB64ControlSystem.Migrations
                     table.ForeignKey(
                         name: "FK_MateriaProfesor_Profesor_ProfesoresId",
                         column: x => x.ProfesoresId,
-                        principalTable: "Profesor",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Alumno",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FechaNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FechaIngreso = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FechaEgreso = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GrupoPeriodoId = table.Column<int>(type: "int", nullable: true),
-                    SemestreId = table.Column<int>(type: "int", nullable: false),
-                    IdEstado = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApellidoPaterno = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApellidoMaterno = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NumeroTelefonico = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Alumno", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Alumno_AlumnoEstado_IdEstado",
-                        column: x => x.IdEstado,
-                        principalTable: "AlumnoEstado",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Alumno_Blogs_SemestreId",
-                        column: x => x.SemestreId,
-                        principalTable: "Blogs",
-                        principalColumn: "SemestreId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Alumno_Grupo_Periodos_GrupoPeriodoId",
-                        column: x => x.GrupoPeriodoId,
-                        principalTable: "Grupo_Periodos",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Asignatura",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GrupoPeriodoId = table.Column<int>(type: "int", nullable: false),
-                    ProfesorID = table.Column<int>(type: "int", nullable: false),
-                    MateriaId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Asignatura", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Asignatura_Grupo_Periodos_GrupoPeriodoId",
-                        column: x => x.GrupoPeriodoId,
-                        principalTable: "Grupo_Periodos",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Asignatura_Materia_MateriaId",
-                        column: x => x.MateriaId,
-                        principalTable: "Materia",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Asignatura_Profesor_ProfesorID",
-                        column: x => x.ProfesorID,
                         principalTable: "Profesor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -602,9 +583,9 @@ namespace CEB64ControlSystem.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Alumno_GrupoPeriodoId",
+                name: "IX_Alumno_GrupoId",
                 table: "Alumno",
-                column: "GrupoPeriodoId");
+                column: "GrupoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Alumno_IdEstado",
@@ -622,9 +603,9 @@ namespace CEB64ControlSystem.Migrations
                 column: "AlumnoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Asignatura_GrupoPeriodoId",
+                name: "IX_Asignatura_GrupoId",
                 table: "Asignatura",
-                column: "GrupoPeriodoId");
+                column: "GrupoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Asignatura_MateriaId",
@@ -676,11 +657,6 @@ namespace CEB64ControlSystem.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlogImages_SemestreID",
-                table: "BlogImages",
-                column: "SemestreID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CalificacionEvaluacion_AlumnoId",
                 table: "CalificacionEvaluacion",
                 column: "AlumnoId");
@@ -701,14 +677,14 @@ namespace CEB64ControlSystem.Migrations
                 column: "EvaluacionCategoriaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Grupo_Periodos_GrupoId",
-                table: "Grupo_Periodos",
-                column: "GrupoId");
+                name: "IX_Grupo_PeriodoId",
+                table: "Grupo",
+                column: "PeriodoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Grupo_Periodos_PeriodoId",
-                table: "Grupo_Periodos",
-                column: "PeriodoId");
+                name: "IX_Grupo_SemestreID",
+                table: "Grupo",
+                column: "SemestreID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HoraClase_PeriodoId",
@@ -814,7 +790,7 @@ namespace CEB64ControlSystem.Migrations
                 name: "EvaluacionCategoria");
 
             migrationBuilder.DropTable(
-                name: "Grupo_Periodos");
+                name: "Grupo");
 
             migrationBuilder.DropTable(
                 name: "Materia");
@@ -823,16 +799,13 @@ namespace CEB64ControlSystem.Migrations
                 name: "Profesor");
 
             migrationBuilder.DropTable(
-                name: "BlogImages");
+                name: "Blogs");
 
             migrationBuilder.DropTable(
                 name: "Periodo");
 
             migrationBuilder.DropTable(
                 name: "TipoCalificacion");
-
-            migrationBuilder.DropTable(
-                name: "Blogs");
         }
     }
 }

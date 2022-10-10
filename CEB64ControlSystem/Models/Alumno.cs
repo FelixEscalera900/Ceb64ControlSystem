@@ -12,8 +12,8 @@ namespace CEB64ControlSystem.Models
         public DateTime FechaIngreso { get; set; }
         [Display(Name = "Fecha Egreso")]
         public DateTime? FechaEgreso { get; set; }
-        public Grupo_Periodo? GrupoPeriodo { get; set; }
-        public int? GrupoPeriodoId { get; set; }
+        public Grupo? Grupo { get; set; }
+        public int? GrupoId { get; set; }
         public Semestre Semestre { get; set; }
         public int SemestreId { get; set; }
         [Display(Name = "Contactos")]

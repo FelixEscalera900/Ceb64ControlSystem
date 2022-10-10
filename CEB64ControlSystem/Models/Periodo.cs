@@ -8,7 +8,7 @@ namespace CEB64ControlSystem.Models
         [Display(Name = "Periodo")]
         public string Name { get; set; }
         public bool IsTheCurrentPeriodo { get; set; }
-        public List<Grupo_Periodo> Grupo_periodo { get; set; }
+        public List<Grupo> Grupo { get; set; }
         public List<PlanEstudio> PlanEstudios { get; set; }
         public List<HoraClase> HoraClases { get; set; }
     }

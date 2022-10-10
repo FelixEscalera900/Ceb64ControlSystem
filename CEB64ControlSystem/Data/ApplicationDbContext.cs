@@ -21,15 +21,10 @@ namespace CEB64ControlSystem.Data
                 .HasForeignKey(b => b.SemestreID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Grupo_Periodo>()
-                .HasOne(g => g.Grupo)
-                .WithMany(g => g.Grupo_periodo)
-                .HasForeignKey(g => g.GrupoId)
-                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Grupo_Periodo>()
+            modelBuilder.Entity<Grupo>()
                 .HasOne(g => g.Periodo)
-                .WithMany(g => g.Grupo_periodo)
+                .WithMany(g => g.Grupo)
                 .HasForeignKey(g => g.PeriodoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -45,9 +40,9 @@ namespace CEB64ControlSystem.Data
                 .OnDelete(DeleteBehavior.Restrict);
                 
             modelBuilder.Entity<Alumno>()
-                .HasOne(a => a.GrupoPeriodo)
+                .HasOne(a => a.Grupo)
                 .WithMany(gp => gp.Alumnos)
-                .HasForeignKey(a => a.GrupoPeriodoId)
+                .HasForeignKey(a => a.GrupoId)
                 .OnDelete(DeleteBehavior.SetNull);
             
             modelBuilder.Entity<Alumno>()
@@ -77,9 +72,9 @@ namespace CEB64ControlSystem.Data
                 .WithMany(p => p.Materias);
 
             modelBuilder.Entity<Asignatura>()
-                .HasOne(a => a.GrupoPeriodo)
+                .HasOne(a => a.Grupo)
                 .WithMany(GP => GP.Asignaturas)
-                .HasForeignKey(a => a.GrupoPeriodoId);
+                .HasForeignKey(a => a.GrupoId);
 
             modelBuilder.Entity<Asignatura>()
                 .HasOne(a => a.Materia)
@@ -133,6 +128,6 @@ namespace CEB64ControlSystem.Data
         }
         public DbSet<Semestre> Blogs { get; set; }
         public DbSet<Grupo> BlogImages { get; set; }
-        public DbSet<Grupo_Periodo> Grupo_Periodos { get; set; }
+        public DbSet<Grupo> Grupo_Periodos { get; set; }
     }
 }

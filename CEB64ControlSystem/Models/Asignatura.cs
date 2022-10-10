@@ -3,8 +3,8 @@
     public class Asignatura 
     {
         public int Id { get; set; }
-        public int GrupoPeriodoId { get; set; }
-        public Grupo_Periodo GrupoPeriodo { get; set; }
+        public int GrupoId { get; set; }
+        public Grupo Grupo { get; set; }
         public int ProfesorID { get; set; }
         public Profesor Profesor { get; set; }
         public int MateriaId { get; set; }
