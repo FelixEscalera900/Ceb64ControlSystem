@@ -1,0 +1,32 @@
+﻿@using CEB64ControlSystem.ViewModels
+@model Grupo
+
+<h1 class="mb-2">1A <i class="fa-solid fa-user-group"></i></h1>
+<section class="edit-section" >
+    <div>
+        <h3 class="mb-2">Editar grupo</h3>
+        <section class="row ">
+            <div class="w-50">
+                <label asp-for="Name" class="control-label"></label>
+                <input class="form-control" />
+                <span  class="text-danger"></span>
+            </div>
+            <div class="w-50">
+                <label asp-for="SemestreID" class="control-label"></label>
+                <select class="form-select" >
+                   @* <option value="">All</option>*@
+                </select>
+                <span class="text-danger"></span>
+            </div>
+        </section>
+        <section class="row">
+
+        </section>
+
+    </div>
+</section>
+
+@section Scripts {
+
+    <script type="text/javascript" src="/js/Grupos/Edit.js" ></script>
+}

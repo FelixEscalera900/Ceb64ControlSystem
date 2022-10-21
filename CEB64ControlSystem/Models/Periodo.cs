@@ -11,5 +11,7 @@ namespace CEB64ControlSystem.Models
         public List<Grupo> Grupo { get; set; }
         public List<PlanEstudio> PlanEstudios { get; set; }
         public List<HoraClase> HoraClases { get; set; }
+        public PeriodoTipo PeriodoTipo { get; set; }
+        public int PeriodoTipoId { get; set; }
     }
 }

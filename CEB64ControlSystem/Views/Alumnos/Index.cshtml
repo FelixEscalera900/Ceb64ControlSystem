@@ -1,0 +1,32 @@
+﻿@using CEB64ControlSystem.ModelsDto
+@model List<GrupoDto>
+
+<section class="default-main-container">
+    <h1>Grupos</h1>
+    <div class="d-flex justify-content-end">
+        <a href=~/Grupoes/Create class="btn btn-yellow">Agregar Grupo</a>
+    </div>
+    <table class="table table-hover table-entity">
+        <thead>
+            <tr>
+                <th class="text-dark">Nombre</th>
+                <th>Semestre</th>
+                <th>Periodo</th>
+                <th>#Alumnos</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(GrupoDto grupo in Model)
+        {   
+            <tr onclick="gotoEntityDetails(@grupo.id)">
+                <td>@grupo.Name</td>
+                <td>@grupo.Semestre.Name</td>
+                <td>@grupo.Periodo.Name</td>
+                <td>@grupo.Alumnos.Count</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</section>
+

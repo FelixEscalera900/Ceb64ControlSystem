@@ -1,0 +1,53 @@
+﻿.entity-details-section > div {
+    background: white;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.entity-details > div {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.entity-details label {
+    font-weight: 600;
+    color: /*#F77F00*/ #006CA5;
+}
+
+.entity-details > div > div {
+    width: 20%
+}
+
+.entity-details > section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.entity-details > div {
+    display: flex;
+}
+
+.entity-lists {
+    padding: 0 !important
+}
+
+.entity-lists button {
+    color: #838d9d;
+}
+
+.secondary-props-table thead th {
+    font-size: 0.9rem;
+    color: #212a2e;
+    border: none;
+}
+
+.secondary-props-table thead >tr {
+    border:0;
+}
+
+.secondary-props-table tbody td {
+    background: #f5f7f7;
+}
+

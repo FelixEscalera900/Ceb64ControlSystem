@@ -125,9 +125,25 @@ namespace CEB64ControlSystem.Data
                 .WithMany(a => a.CalificacionEvaluaciones)
                 .HasForeignKey(c => c.AsignaturaId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Semestre>()
+                .HasOne(s => s.PeriodoTipo)
+                .WithMany(s => s.Semestres)
+                .HasForeignKey(s => s.PeriodoTipoId);
+
+            modelBuilder.Entity<Periodo>()
+                .HasOne(s => s.PeriodoTipo)
+                .WithMany(s => s.Periodos)
+                .HasForeignKey(s => s.PeriodoTipoId);
         }
-        public DbSet<Semestre> Blogs { get; set; }
-        public DbSet<Grupo> BlogImages { get; set; }
-        public DbSet<Grupo> Grupo_Periodos { get; set; }
+        public DbSet<Semestre> Semestres { get; set; }
+        public DbSet<Grupo> Grupos { get; set; }
+        public DbSet<Alumno> Alumnos { get; set; }
+        public DbSet<AlumnoContacto> AlumnoContactos { get; set; }
+        public DbSet<AlumnoEstado> AlumnoEstados { get; set; }
+        public DbSet<Asignatura> Asignaturas { get; set; }
+        public DbSet<Periodo> Periodos { get; set; }
+
+        public DbSet<PlanEstudio> planEstudios { get; set; }
     }
 }

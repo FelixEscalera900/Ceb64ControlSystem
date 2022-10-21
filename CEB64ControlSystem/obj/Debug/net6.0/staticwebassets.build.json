@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "gkgz98BG/J0j7nWU+Mf1AMBJ7v5mso7JMhQoDX/25TY=",
+  "Hash": "lc/eYlwUIZ+PlscFhyaG1uDXEvAue4kj6y3Fr+zmFqc=",
   "Source": "CEB64ControlSystem",
   "BasePath": "_content/CEB64ControlSystem",
   "Mode": "Default",
@@ -1819,6 +1819,40 @@
       "OriginalItemSpec": "C:\\Users\\felixe\\Desktop\\CEB64ControlSystem\\CEB64ControlSystem\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\CEB64ControlSystem.bundle.scp.css"
     },
     {
+      "Identity": "C:\\Users\\felixe\\Desktop\\CEB64ControlSystem\\CEB64ControlSystem\\wwwroot\\css\\DetailsPage.css",
+      "SourceId": "CEB64ControlSystem",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\felixe\\Desktop\\CEB64ControlSystem\\CEB64ControlSystem\\wwwroot\\",
+      "BasePath": "_content/CEB64ControlSystem",
+      "RelativePath": "css/DetailsPage.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\DetailsPage.css"
+    },
+    {
+      "Identity": "C:\\Users\\felixe\\Desktop\\CEB64ControlSystem\\CEB64ControlSystem\\wwwroot\\css\\Grupos\\Index.css",
+      "SourceId": "CEB64ControlSystem",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\felixe\\Desktop\\CEB64ControlSystem\\CEB64ControlSystem\\wwwroot\\",
+      "BasePath": "_content/CEB64ControlSystem",
+      "RelativePath": "css/Grupos/Index.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\Grupos\\Index.css"
+    },
+    {
       "Identity": "C:\\Users\\felixe\\Desktop\\CEB64ControlSystem\\CEB64ControlSystem\\wwwroot\\css\\site.css",
       "SourceId": "CEB64ControlSystem",
       "SourceType": "Discovered",
@@ -1851,6 +1885,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\felixe\\Desktop\\CEB64ControlSystem\\CEB64ControlSystem\\wwwroot\\js\\Grupos\\Edit.js",
+      "SourceId": "CEB64ControlSystem",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\felixe\\Desktop\\CEB64ControlSystem\\CEB64ControlSystem\\wwwroot\\",
+      "BasePath": "_content/CEB64ControlSystem",
+      "RelativePath": "js/Grupos/Edit.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\Grupos\\Edit.js"
     },
     {
       "Identity": "C:\\Users\\felixe\\Desktop\\CEB64ControlSystem\\CEB64ControlSystem\\wwwroot\\js\\site.js",

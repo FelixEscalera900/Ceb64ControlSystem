@@ -17,7 +17,7 @@ namespace CEB64ControlSystem.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -76,7 +76,7 @@ namespace CEB64ControlSystem.Migrations
 
                     b.HasIndex("SemestreId");
 
-                    b.ToTable("Alumno");
+                    b.ToTable("Alumnos");
                 });
 
             modelBuilder.Entity("CEB64ControlSystem.Models.AlumnoContacto", b =>
@@ -118,7 +118,7 @@ namespace CEB64ControlSystem.Migrations
 
                     b.HasIndex("AlumnoId");
 
-                    b.ToTable("AlumnoContacto");
+                    b.ToTable("AlumnoContactos");
                 });
 
             modelBuilder.Entity("CEB64ControlSystem.Models.AlumnoEstado", b =>
@@ -135,7 +135,7 @@ namespace CEB64ControlSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AlumnoEstado");
+                    b.ToTable("AlumnoEstados");
                 });
 
             modelBuilder.Entity("CEB64ControlSystem.Models.Asignatura", b =>
@@ -163,7 +163,7 @@ namespace CEB64ControlSystem.Migrations
 
                     b.HasIndex("ProfesorID");
 
-                    b.ToTable("Asignatura");
+                    b.ToTable("Asignaturas");
                 });
 
             modelBuilder.Entity("CEB64ControlSystem.Models.CalificacionEvaluacion", b =>
@@ -264,10 +264,14 @@ namespace CEB64ControlSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<int>("GrupoId")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PeriodoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PlanEstudioId")
                         .HasColumnType("int");
 
                     b.Property<int>("SemestreID")
@@ -277,9 +281,11 @@ namespace CEB64ControlSystem.Migrations
 
                     b.HasIndex("PeriodoId");
 
+                    b.HasIndex("PlanEstudioId");
+
                     b.HasIndex("SemestreID");
 
-                    b.ToTable("Grupo");
+                    b.ToTable("Grupos");
                 });
 
             modelBuilder.Entity("CEB64ControlSystem.Models.HoraClase", b =>
@@ -377,9 +383,31 @@ namespace CEB64ControlSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PeriodoTipoId")
+                        .HasColumnType("int");
+
                     b.HasKey("PeriodoId");
 
-                    b.ToTable("Periodo");
+                    b.HasIndex("PeriodoTipoId");
+
+                    b.ToTable("Periodos");
+                });
+
+            modelBuilder.Entity("CEB64ControlSystem.Models.PeriodoTipo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PeriodoTipo");
                 });
 
             modelBuilder.Entity("CEB64ControlSystem.Models.PlanEstudio", b =>
@@ -407,7 +435,7 @@ namespace CEB64ControlSystem.Migrations
 
                     b.HasIndex("PeriodoId");
 
-                    b.ToTable("PlanEstudio");
+                    b.ToTable("planEstudios");
                 });
 
             modelBuilder.Entity("CEB64ControlSystem.Models.Profesor", b =>
@@ -461,19 +489,24 @@ namespace CEB64ControlSystem.Migrations
 
             modelBuilder.Entity("CEB64ControlSystem.Models.Semestre", b =>
                 {
-                    b.Property<int>("SemestreId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SemestreId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("SemestreName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SemestreId");
+                    b.Property<int>("PeriodoTipoId")
+                        .HasColumnType("int");
 
-                    b.ToTable("Blogs");
+                    b.HasKey("Id");
+
+                    b.HasIndex("PeriodoTipoId");
+
+                    b.ToTable("Semestres");
                 });
 
             modelBuilder.Entity("CEB64ControlSystem.Models.TipoCalificacion", b =>
@@ -834,6 +867,10 @@ namespace CEB64ControlSystem.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CEB64ControlSystem.Models.PlanEstudio", "PlanEstudio")
+                        .WithMany()
+                        .HasForeignKey("PlanEstudioId");
+
                     b.HasOne("CEB64ControlSystem.Models.Semestre", "Semestre")
                         .WithMany("Grupos")
                         .HasForeignKey("SemestreID")
@@ -841,6 +878,8 @@ namespace CEB64ControlSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Periodo");
+
+                    b.Navigation("PlanEstudio");
 
                     b.Navigation("Semestre");
                 });
@@ -893,6 +932,17 @@ namespace CEB64ControlSystem.Migrations
                     b.Navigation("TipoCalificacion");
                 });
 
+            modelBuilder.Entity("CEB64ControlSystem.Models.Periodo", b =>
+                {
+                    b.HasOne("CEB64ControlSystem.Models.PeriodoTipo", "PeriodoTipo")
+                        .WithMany("Periodos")
+                        .HasForeignKey("PeriodoTipoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PeriodoTipo");
+                });
+
             modelBuilder.Entity("CEB64ControlSystem.Models.PlanEstudio", b =>
                 {
                     b.HasOne("CEB64ControlSystem.Models.Periodo", "Periodo")
@@ -902,6 +952,17 @@ namespace CEB64ControlSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Periodo");
+                });
+
+            modelBuilder.Entity("CEB64ControlSystem.Models.Semestre", b =>
+                {
+                    b.HasOne("CEB64ControlSystem.Models.PeriodoTipo", "PeriodoTipo")
+                        .WithMany("Semestres")
+                        .HasForeignKey("PeriodoTipoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PeriodoTipo");
                 });
 
             modelBuilder.Entity("MateriaPlanEstudio", b =>
@@ -1038,6 +1099,13 @@ namespace CEB64ControlSystem.Migrations
                     b.Navigation("HoraClases");
 
                     b.Navigation("PlanEstudios");
+                });
+
+            modelBuilder.Entity("CEB64ControlSystem.Models.PeriodoTipo", b =>
+                {
+                    b.Navigation("Periodos");
+
+                    b.Navigation("Semestres");
                 });
 
             modelBuilder.Entity("CEB64ControlSystem.Models.Profesor", b =>

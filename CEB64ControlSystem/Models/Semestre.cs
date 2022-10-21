@@ -4,11 +4,13 @@ namespace CEB64ControlSystem.Models
 {
     public class Semestre 
     {
-        public int SemestreId { get; set; }
+        public int Id { get; set; }
         [Display(Name = "Semestre")]
-        public string SemestreName { get; set; }
+        public string Name { get; set; }
         public List<Grupo> Grupos { get; set; }
         public List<Alumno> Alumnos { get; set; }
+        public PeriodoTipo PeriodoTipo { get; set; } 
+        public int PeriodoTipoId { get; set; }
 
     }
 }

@@ -1,0 +1,91 @@
+﻿@using CEB64ControlSystem.ModelsDto
+
+@model GrupoDto
+
+<section class="entity-details-section">
+    <div class="entity-details">
+        <section class="border-bottom">
+            <h4>@Model.Name</h4>
+            <div >
+                <a class="word-link" href="#">Editar Grupo</a>
+            </div>
+        </section>
+        <div class="pt-3">
+            <div>
+                <label>@Html.DisplayNameFor(m => m.Semestre.Name):</label>
+                <div class="text-secondary">@Model.Semestre.Name</div>
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(m => m.Periodo.Name):</label>
+                <div class="text-secondary">@Model.Periodo.Name</div>
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(m => m.PlanEstudio.Name):</label>
+                <div class="text-secondary">@Model.PlanEstudio?.Name</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="entity-lists">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Alumnos</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profesores Asignados</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Horario</button>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+
+          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <table class="table table-hover table-entity secondary-props-table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(m => m.Alumnos.FirstOrDefault().Id)</th>
+                        <th>@Html.DisplayNameFor(m => m.Alumnos.FirstOrDefault().FullName)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach(AlumnoDto alumno in Model.Alumnos)
+                {   
+                    <tr onclick="gotoEntityDetails(@alumno.Id)">
+                        <td>@alumno.Name</td>
+                        <td>@alumno.Semestre.Name</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+          </div>
+
+          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="d-flex justify-content-end"><button class="btn btn-yellow">Asignar profesor</button></div>
+            <table class="table table-hover table-entity secondary-props-table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(m => m.Asignaturas.FirstOrDefault().Materia.Name)</th>
+                        <th>@Html.DisplayNameFor(m => m.Asignaturas.FirstOrDefault().Profesor.Name)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach(Asignatura asignatura in Model.Asignaturas)
+                {   
+                    <tr>
+                        <td>@asignatura.Materia.Name</td>
+                        <td>@asignatura.Profesor.Name</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+          </div>
+
+          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+        </div>
+    </div>
+</section>
+
+@section styles {
+    <link rel="stylesheet" href="~/css/DetailsPage.css" asp-append-version="true" />
+}

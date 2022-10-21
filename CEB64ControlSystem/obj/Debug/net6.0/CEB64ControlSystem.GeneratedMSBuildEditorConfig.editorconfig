@@ -11,12 +11,40 @@ build_property.RootNamespace = CEB64ControlSystem
 build_property.ProjectDir = C:\Users\felixe\Desktop\CEB64ControlSystem\CEB64ControlSystem\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
-build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
 build_property.MSBuildProjectDirectory = C:\Users\felixe\Desktop\CEB64ControlSystem\CEB64ControlSystem
 build_property._RazorSourceGeneratorDebug = 
 
 [C:/Users/felixe/Desktop/CEB64ControlSystem/CEB64ControlSystem/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/felixe/Desktop/CEB64ControlSystem/CEB64ControlSystem/Views/Alumnos/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWx1bW5vc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/felixe/Desktop/CEB64ControlSystem/CEB64ControlSystem/Views/Alumnos/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWx1bW5vc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/felixe/Desktop/CEB64ControlSystem/CEB64ControlSystem/Views/Alumnos/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWx1bW5vc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/felixe/Desktop/CEB64ControlSystem/CEB64ControlSystem/Views/Grupoes/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1cG9lc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/felixe/Desktop/CEB64ControlSystem/CEB64ControlSystem/Views/Grupoes/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1cG9lc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/felixe/Desktop/CEB64ControlSystem/CEB64ControlSystem/Views/Grupoes/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1cG9lc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/felixe/Desktop/CEB64ControlSystem/CEB64ControlSystem/Views/Grupoes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1cG9lc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/felixe/Desktop/CEB64ControlSystem/CEB64ControlSystem/Views/Home/Index.cshtml]

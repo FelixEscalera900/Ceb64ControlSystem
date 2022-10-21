@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace CEB64ControlSystem.Models
 {
     public class Alumno : PersonaContacto
-    {
+    { 
+        [Display(Name = "Matrícula")]
         public int Id { get; set; }
         [Display(Name = "Fecha Ingreso")]
         public DateTime FechaNacimiento { get; set; }

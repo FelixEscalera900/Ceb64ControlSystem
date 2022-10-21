@@ -1,0 +1,26 @@
+﻿
+@using CEB64ControlSystem.ViewModels
+@model CreateGrupoViewModel
+
+<h1>Crear Grupo</h1>
+<form asp-action="Create">
+    <section class="row ">
+        <div class="w-50">
+            <label asp-for="Name" class="control-label"></label>
+            <input name="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </section>
+    <section class="row">
+        <div class="w-50">
+            <label asp-for="SemestreID" class="control-label"></label>
+            <select class="form-select" name="SemestreID" asp-items="Model.SemestresSelect">
+               @* <option value="">All</option>*@
+            </select>
+            <span asp-validation-for="SemestreID" class="text-danger"></span>
+        </div>
+    </section>
+    <section class="mt-2">
+        <button class="btn btn-primary">Crear</button>
+    </section>
+</form>

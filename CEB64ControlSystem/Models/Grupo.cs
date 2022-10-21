@@ -8,11 +8,13 @@ namespace CEB64ControlSystem.Models
         public int PeriodoId { get; set; }
         public Periodo Periodo { get; set; }
         [Display(Name = "Grupo")]
-        public int GrupoId { get; set; }
+        public string Name { get; set; }
         public List<Asignatura> Asignaturas { get; set; }
         public List<Alumno> Alumnos { get; set; }
         public int SemestreID { get; set; }
         public Semestre Semestre { get; set; }
+        public PlanEstudio PlanEstudio { get; set; }
+        public int? PlanEstudioId { get; set; }
 
     }
 }
