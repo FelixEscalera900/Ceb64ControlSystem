@@ -14,12 +14,12 @@ using CEB64ControlSystem.ModelsDto;
 
 namespace CEB64ControlSystem.Controllers
 {
-    public class GrupoesController : Controller
+    public class GrupoesController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public GrupoesController(ApplicationDbContext context, IMapper mapper)
+        public GrupoesController(ApplicationDbContext context, IMapper mapper):base(context)
         {
             _context = context;
             _mapper = mapper;
@@ -66,12 +66,7 @@ namespace CEB64ControlSystem.Controllers
         // GET: Grupoes/Create
         public IActionResult Create()
         {
-            var currentPeriodo = _context.Periodos
-                .Include(p => p.PeriodoTipo)
-                    .ThenInclude(p => p.Semestres)
-                .FirstOrDefault(p => p.IsTheCurrentPeriodo);
-
-            var semestres = currentPeriodo.PeriodoTipo.Semestres.ToList();
+            var semestres = GetPeriodoSemestres();
 
             var ViewModel = new CreateGrupoViewModel()
             {
@@ -86,23 +81,24 @@ namespace CEB64ControlSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,SemestreID")] Grupo grupo)
+        public async Task<IActionResult> Create([Bind("Name,SemestreID")] CreateGrupoViewModel grupo)
         {
             if (ModelState.IsValid)
             {
+                Grupo grupoEntity = grupo;
 
-                grupo.PeriodoId = _context.Periodos.FirstOrDefault(p => p.IsTheCurrentPeriodo).PeriodoId;
+                grupoEntity.PeriodoId = _context.Periodos.FirstOrDefault(p => p.IsTheCurrentPeriodo).PeriodoId;
 
-                _context.Add(grupo);
+                _context.Add(grupoEntity);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Create));
+            return View(grupo);
         }
 
-        // GET: Grupoes/Edit/5
+        // GET: Grupoes/Edit/5EditModel
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Grupos == null)
@@ -110,23 +106,26 @@ namespace CEB64ControlSystem.Controllers
                 return NotFound();
             }
 
-            var grupo = await _context.Grupos.FindAsync(id);
-            if (grupo == null)
+            return View(new Grupo());
+        }
+
+        public async Task<IActionResult> EditData(int? id)
+        {
+            if (id == null || _context.Grupos == null)
             {
                 return NotFound();
             }
-            ViewData["PeriodoId"] = new SelectList(_context.Set<Periodo>(), "PeriodoId", "PeriodoId", grupo.PeriodoId);
-            ViewData["PlanEstudioId"] = new SelectList(_context.Set<PlanEstudio>(), "Id", "Id", grupo.PlanEstudioId);
-            ViewData["SemestreID"] = new SelectList(_context.Semestres, "Id", "Id", grupo.SemestreID);
-            return View(grupo);
+            var grupo = _context.Grupos.Include(g => g.Semestre).FirstOrDefault(g => g.SemestreID == id);
+
+            EditGrupoViewModel Model = _mapper.Map<EditGrupoViewModel>(grupo);
+            Model.Semestres = GetPeriodoSemestres();
+
+            return Ok(Model);
         }
 
-        // POST: Grupoes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+            [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,PeriodoId,Name,SemestreID,PlanEstudioId")] Grupo grupo)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,SemestreID")] Grupo grupo)
         {
             if (id != grupo.id)
             {
@@ -135,6 +134,8 @@ namespace CEB64ControlSystem.Controllers
 
             if (ModelState.IsValid)
             {
+
+
                 try
                 {
                     _context.Update(grupo);
@@ -151,12 +152,11 @@ namespace CEB64ControlSystem.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            ViewData["PeriodoId"] = new SelectList(_context.Set<Periodo>(), "PeriodoId", "PeriodoId", grupo.PeriodoId);
-            ViewData["PlanEstudioId"] = new SelectList(_context.Set<PlanEstudio>(), "Id", "Id", grupo.PlanEstudioId);
-            ViewData["SemestreID"] = new SelectList(_context.Semestres, "Id", "Id", grupo.SemestreID);
-            return View(grupo);
+
+            return NotFound();
+
         }
 
         // GET: Grupoes/Delete/5

@@ -43,6 +43,7 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.10",
           "Microsoft.EntityFrameworkCore.Tools": "6.0.10",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "6.0.10",
+          "axios.js": "0.18.0",
           "bootstrap": "5.2.1",
           "jQuery": "3.6.0",
           "Microsoft.AspNetCore.Antiforgery": "6.0.0.0",
@@ -140,6 +141,7 @@
           "Microsoft.Extensions.Configuration.UserSecrets": "6.0.0.0",
           "Microsoft.Extensions.Configuration.Xml": "6.0.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions.Reference": "6.0.0.0",
+          "Microsoft.Extensions.DependencyInjection.Reference": "6.0.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": "6.0.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "6.0.0.0",
           "Microsoft.Extensions.Features": "6.0.0.0",
@@ -369,6 +371,7 @@
           "lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
         }
       },
+      "axios.js/0.18.0": {},
       "bootstrap/5.2.1": {},
       "Humanizer.Core/2.8.26": {
         "runtime": {
@@ -1505,9 +1508,6 @@
             "assemblyVersion": "6.0.0.0",
             "fileVersion": "6.0.1022.47605"
           }
-        },
-        "compile": {
-          "lib/net6.0/Microsoft.Extensions.DependencyInjection.dll": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions/6.0.0": {},
@@ -3498,6 +3498,12 @@
         },
         "compileOnly": true
       },
+      "Microsoft.Extensions.DependencyInjection.Reference/6.0.0.0": {
+        "compile": {
+          "Microsoft.Extensions.DependencyInjection.dll": {}
+        },
+        "compileOnly": true
+      },
       "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions/6.0.0.0": {
         "compile": {
           "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll": {}
@@ -4671,6 +4677,13 @@
       "sha512": "sha512-XCJ4E3oKrbRl1qY9Mr+7uyC0xZj1+bqQjmQRWTiTKiVuuXTny+7YFWHi20tPjwkMukLbicN6yGlDy5PZ4wyi1w==",
       "path": "automapper.extensions.microsoft.dependencyinjection/12.0.0",
       "hashPath": "automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512"
+    },
+    "axios.js/0.18.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ds7LuSKfty2KQmqzagcRDJAvuf5uUP4TxniPNImGW0ybgjqo4mjVnOXMWEWy9C3jRMFAcRKrTdzOGTpwJXdDbA==",
+      "path": "axios.js/0.18.0",
+      "hashPath": "axios.js.0.18.0.nupkg.sha512"
     },
     "bootstrap/5.2.1": {
       "type": "package",
@@ -6438,6 +6451,11 @@
       "sha512": ""
     },
     "Microsoft.Extensions.DependencyInjection.Abstractions.Reference/6.0.0.0": {
+      "type": "referenceassembly",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Extensions.DependencyInjection.Reference/6.0.0.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
