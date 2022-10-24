@@ -1,7 +1,9 @@
 ﻿@using CEB64ControlSystem.ViewModels
 @model Grupo
 
-<div class="App">
+
+<script>let Id = @Model.id</script>
+<div id="app">
     <h1 class="mb-2">1A <i class="fa-solid fa-user-group"></i></h1>
     <section class="edit-section">
         <div>
@@ -15,7 +17,7 @@
                 <div class="w-50">
                     <label asp-for="SemestreID" class="control-label"></label>
                     <select class="form-select" v-model="Model.SemestreID">
-                         <option v-for="Semestre in Model.Semestres" value="Semestre.Id">Semestre.Name</option>
+                         <option v-for="Semestre in Model.Semestres" value="Semestre.Id">{{Semestre.Name}}</option>
                     </select>
                     <span class="text-danger"></span>
                 </div>

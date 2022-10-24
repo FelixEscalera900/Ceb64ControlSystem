@@ -1,13 +1,15 @@
 ﻿Vue.createApp({
     data() {
         return {
-            Model: {}
+            Model: {},
+            Id
         }
     },
     mounted() {
-        axios.get("Editdata")
+        let scope = this
+        axios.get("Editdata/" + this.Id)
             .then(response => {
-                Model = response.data
+                scope.Model = response.data
             })
             .catch(error => {
 
@@ -38,4 +40,4 @@
         }
     }
 
-}).mount("#App")
+}).mount("#app")

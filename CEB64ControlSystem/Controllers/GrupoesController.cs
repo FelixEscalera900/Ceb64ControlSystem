@@ -106,7 +106,7 @@ namespace CEB64ControlSystem.Controllers
                 return NotFound();
             }
 
-            return View(new Grupo());
+            return View(new Grupo() { id = id.Value});
         }
 
         public async Task<IActionResult> EditData(int? id)
