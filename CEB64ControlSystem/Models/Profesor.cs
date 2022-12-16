@@ -15,5 +15,11 @@ namespace CEB64ControlSystem.Models
         public DateTime FechaIngreso { get; set; }
         public List<Materia> Materias { get; set; }
         public List<Asignatura> Asignaturas { get; set; }
+        public string Name { get; set; }
+        public string ApellidoPaterno { get; set; }
+        public string ApellidoMaterno { get; set; }
+        public string Direccion { get; set; }
+        public string NumeroTelefonico { get; set; }
+        public string Mail { get; set; }
     }
 }

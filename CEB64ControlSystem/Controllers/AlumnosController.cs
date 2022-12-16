@@ -2,55 +2,86 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CEB64ControlSystem.Data;
-using CEB64ControlSystem.Models;
+using CEB64ControlSystem.ViewModelFactories;
+using CEB64ControlSystem.ModelsDto;
+using CEB64ControlSystem.Queries.Alumnos;
+using CEB64ControlSystem.Queries.Semestres;
+using CEB64ControlSystem.ViewModels.Alumnos;
+using CEB64ControlSystem.Queries.Grupos;
+using CEB64ControlSystem.Commands.Alumnos;
+using CEB64ControlSystem.ModelsDto.Common;
 
 namespace CEB64ControlSystem.Controllers
 {
     public class AlumnosController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        IAlumnosQueries _alumnosQueries;
+        ISemestreQueries _semestresQueries;
+        IGruposQueries _gruposQueries;
+        IAlumnosCommands _alumnosCommands;
 
-        public AlumnosController(ApplicationDbContext context)
+        public AlumnosController(IAlumnosQueries alumnosQueries, ISemestreQueries semestresQueries, IGruposQueries gruposQueries, Commands.Alumnos.IAlumnosCommands alumnosCommands)
         {
-            _context = context;
+            _alumnosQueries = alumnosQueries;
+            _semestresQueries = semestresQueries;
+            _gruposQueries = gruposQueries;
+            _alumnosCommands = alumnosCommands;
+
         }
 
         // GET: Alumnos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(AlumnosListViewModel Model)
         {
-            var applicationDbContext = _context.Alumnos.Include(a => a.Estado).Include(a => a.Grupo).Include(a => a.Semestre);
-            return View(await applicationDbContext.ToListAsync());
+            var Factory = new IdentityListViewModelFactory<AlumnoDto>();
+
+            Factory.Entities = _alumnosQueries.FindMany(Model.Filters);
+
+            Factory.ShowProperty(a => a.FullName);
+            Factory.ShowProperty(a => a.Semestre.Name);
+            Factory.ShowProperty(a => a.Grupo.Name);
+            Factory.ShowProperty(a => a.NumeroDeLista);
+
+
+            Factory.FillModel(Model);
+
+            Model.Semestres = _semestresQueries.GetPeriodoSemestres();
+            Model.Grupos = _gruposQueries.FindMany(new GrupoDto { SemestreID = Model.Filters.SemestreId });
+
+            return View(Model);
+
         }
 
         // GET: Alumnos/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int Id)
         {
-            if (id == null || _context.Alumnos == null)
-            {
-                return NotFound();
-            }
+            AlumnoDto Model = _alumnosQueries.Find(Id);
 
-            var alumno = await _context.Alumnos
-                .Include(a => a.Estado)
-                .Include(a => a.Grupo)
-                .Include(a => a.Semestre)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (alumno == null)
-            {
+            if (Model == null)
                 return NotFound();
-            }
-
-            return View(alumno);
+           
+            return View(Model);
         }
 
-        // GET: Alumnos/Create
         public IActionResult Create()
         {
-            ViewData["IdEstado"] = new SelectList(_context.AlumnoEstados, "Id", "Id");
-            ViewData["GrupoId"] = new SelectList(_context.Grupos, "id", "id");
-            ViewData["SemestreId"] = new SelectList(_context.Semestres, "Id", "Id");
-            return View();
+
+            CreateAlumnoViewModel Model = new CreateAlumnoViewModel();
+
+            Model.Semestres = _semestresQueries.GetPeriodoSemestres();
+
+            return View(Model);
+        }
+
+        public ActionResult CreateInitialData()
+        {
+            return Json(_semestresQueries.GetPeriodoSemestres());
+        }
+
+        public async Task<ActionResult> Grupos(int Id)
+        {
+            List<SelectOption> Grupos = _gruposQueries.GetSelectList(new GrupoDto { SemestreID = Id });
+
+            return Json(Grupos);
         }
 
         // POST: Alumnos/Create
@@ -58,37 +89,31 @@ namespace CEB64ControlSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaNacimiento,FechaIngreso,FechaEgreso,GrupoId,SemestreId,IdEstado,Name,ApellidoPaterno,ApellidoMaterno,Direccion,NumeroTelefonico")] Alumno alumno)
+        public IActionResult Create([FromBody] CreateAlumnoViewModel Model)
         {
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
             {
-                _context.Add(alumno);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Model.Semestres = _semestresQueries.GetPeriodoSemestres();
+
+                return BadRequest();
             }
-            ViewData["IdEstado"] = new SelectList(_context.AlumnoEstados, "Id", "Id", alumno.IdEstado);
-            ViewData["GrupoId"] = new SelectList(_context.Grupos, "id", "id", alumno.GrupoId);
-            ViewData["SemestreId"] = new SelectList(_context.Semestres, "Id", "Id", alumno.SemestreId);
-            return View(alumno);
+
+            _alumnosCommands.Create(Model);
+
+            return Ok();
         }
 
         // GET: Alumnos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null || _context.Alumnos == null)
-            {
-                return NotFound();
-            }
+            EditAlumnoViewModel Model = 
+                _alumnosQueries.GetEntityBasedModel<EditAlumnoViewModel>(id);
 
-            var alumno = await _context.Alumnos.FindAsync(id);
-            if (alumno == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdEstado"] = new SelectList(_context.AlumnoEstados, "Id", "Id", alumno.IdEstado);
-            ViewData["GrupoId"] = new SelectList(_context.Grupos, "id", "id", alumno.GrupoId);
-            ViewData["SemestreId"] = new SelectList(_context.Semestres, "Id", "Id", alumno.SemestreId);
-            return View(alumno);
+            Model.SemestresSelect = new SelectList(_semestresQueries.GetPeriodoSemestres(), "Id", "Name");
+            Model.GruposSelect = new SelectList(_gruposQueries.FindMany(new GrupoDto { SemestreID = Model.SemestreId }), "Id", "Name");
+
+            return View(Model);
         }
 
         // POST: Alumnos/Edit/5
@@ -96,82 +121,42 @@ namespace CEB64ControlSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FechaNacimiento,FechaIngreso,FechaEgreso,GrupoId,SemestreId,IdEstado,Name,ApellidoPaterno,ApellidoMaterno,Direccion,NumeroTelefonico")] Alumno alumno)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FechaNacimiento,FechaIngreso,FechaEgreso,GrupoId,SemestreId,IdEstado,Name,ApellidoPaterno,ApellidoMaterno,Direccion,NumeroTelefonico")] EditAlumnoViewModel Model)
         {
-            if (id != alumno.Id)
-            {
-                return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(alumno);
-                    await _context.SaveChangesAsync();
+                    _alumnosCommands.Update(Model);
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AlumnoExists(alumno.Id))
-                    {
+
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+
                 }
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdEstado"] = new SelectList(_context.AlumnoEstados, "Id", "Id", alumno.IdEstado);
-            ViewData["GrupoId"] = new SelectList(_context.Grupos, "id", "id", alumno.GrupoId);
-            ViewData["SemestreId"] = new SelectList(_context.Semestres, "Id", "Id", alumno.SemestreId);
-            return View(alumno);
-        }
 
-        // GET: Alumnos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Alumnos == null)
-            {
-                return NotFound();
             }
 
-            var alumno = await _context.Alumnos
-                .Include(a => a.Estado)
-                .Include(a => a.Grupo)
-                .Include(a => a.Semestre)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (alumno == null)
-            {
-                return NotFound();
-            }
+            Model.SemestresSelect = new SelectList(_semestresQueries.GetPeriodoSemestres(), "Id", "Name");
+            Model.GruposSelect = new SelectList(_gruposQueries.FindMany(new GrupoDto { SemestreID = Model.SemestreId }), "Id", "Name");
 
-            return View(alumno);
+            return View(Model);
         }
 
         // POST: Alumnos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (_context.Alumnos == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Alumnos'  is null.");
-            }
-            var alumno = await _context.Alumnos.FindAsync(id);
-            if (alumno != null)
-            {
-                _context.Alumnos.Remove(alumno);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
-        private bool AlumnoExists(int id)
-        {
-          return _context.Alumnos.Any(e => e.Id == id);
+
+            _alumnosCommands.Delete(id);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

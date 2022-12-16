@@ -1,74 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CEB64ControlSystem.Data;
 using CEB64ControlSystem.Models;
-using CEB64ControlSystem.ViewModels;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using AutoMapper;
 using CEB64ControlSystem.ModelsDto;
+using CEB64ControlSystem.ViewModelFactories;
+using CEB64ControlSystem.Queries.Grupos;
+using CEB64ControlSystem.Queries.Semestres;
+using CEB64ControlSystem.Commands.Grupos;
+using CEB64ControlSystem.ViewModels.Grupos;
 
 namespace CEB64ControlSystem.Controllers
 {
-    public class GrupoesController : BaseController
+    public class GrupoesController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly ISemestreQueries _SemestreQueries;
+        private readonly IGruposQueries _gruposQueries;
+        private readonly IGruposCommands _gruposCommands;
 
-        public GrupoesController(ApplicationDbContext context, IMapper mapper):base(context)
+        public GrupoesController(ISemestreQueries semestreQueries, IGruposQueries gruposQueries, IGruposCommands gruposCommands)
         {
-            _context = context;
-            _mapper = mapper;
+
+            _SemestreQueries = semestreQueries;
+            _gruposQueries = gruposQueries;
+            _gruposCommands = gruposCommands;
         }
 
         // GET: Grupoes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(GruposListViewModel Model)
         {
-            var grupos = _context.Grupos
-                .Include(g => g.Periodo)
-                .Include(g => g.PlanEstudio)
-                .Include(g => g.Semestre)
-                .Include(g => g.Alumnos)
-                .ToList();
+            var Factory = new IdentityListViewModelFactory<GrupoDto>();
 
-            var dto = _mapper.Map<List<GrupoDto>>(grupos);
+            Factory.Entities = _gruposQueries.FindMany(Model.Filters);
 
-            return View(dto);
+            Factory.ShowProperty(grupo => grupo.Name);
+            Factory.ShowProperty(grupo => grupo.Semestre.Name);
+            Factory.ShowProperty(grupo => grupo.NumeroAlumnos);
+
+            Factory.FillModel(Model);
+            
+            Model.Semestres = _SemestreQueries.GetPeriodoSemestres();
+
+            return View(Model);
         }
 
         // GET: Grupoes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null || _context.Grupos == null)
-            {
-                return NotFound();
-            }
 
-            var grupo = await _context.Grupos
-                .Include(g => g.Periodo)
-                .Include(g => g.PlanEstudio)
-                .Include(g => g.Semestre)
-                .Include(a => a.Alumnos)
-                .Include(g => g.Asignaturas)
-                .FirstOrDefaultAsync(m => m.id == id);
+            GrupoDto grupo = _gruposQueries.Find(id);
+
             if (grupo == null)
             {
                 return NotFound();
             }
             
-            return View(_mapper.Map<GrupoDto>(grupo));
+            return View(grupo);
         }
-
-        // GET: Grupoes/Create
         public IActionResult Create()
         {
-            var semestres = GetPeriodoSemestres();
+            List<Semestre> semestres = _SemestreQueries.GetPeriodoSemestres();
 
-            var ViewModel = new CreateGrupoViewModel()
+            CreateGrupoViewModel ViewModel = new CreateGrupoViewModel()
             {
                 SemestresSelect = new SelectList(semestres, "Id", "Name")
             };
@@ -76,132 +71,83 @@ namespace CEB64ControlSystem.Controllers
             return View(ViewModel);
         }
 
-        // POST: Grupoes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,SemestreID")] CreateGrupoViewModel grupo)
+        public async Task<IActionResult> Create([Bind("Name,SemestreID")] CreateGrupoViewModel Model)
         {
             if (ModelState.IsValid)
             {
-                Grupo grupoEntity = grupo;
-
-                grupoEntity.PeriodoId = _context.Periodos.FirstOrDefault(p => p.IsTheCurrentPeriodo).PeriodoId;
-
-                _context.Add(grupoEntity);
-                await _context.SaveChangesAsync();
+                _gruposCommands.Create(Model);
 
                 return RedirectToAction(nameof(Index));
             }
 
+            List<Semestre> semestres = _SemestreQueries.GetPeriodoSemestres();
+
+            Model.SemestresSelect = new SelectList(semestres, "Id", "Name");
+
+            return View(Model);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            GrupoDto grupo = _gruposQueries.Find(id.Value);
+
             return View(grupo);
         }
 
-        // GET: Grupoes/Edit/5EditModel
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> EditData(int Id)
         {
-            if (id == null || _context.Grupos == null)
-            {
-                return NotFound();
-            }
+            EditGrupoViewModel Model = _gruposQueries.GetEntityBasedModel<EditGrupoViewModel>(Id);
+            Model.Semestres = _SemestreQueries.GetPeriodoSemestres();
 
-            return View(new Grupo() { id = id.Value});
+            return Json(Model);
         }
 
-        public async Task<IActionResult> EditData(int? id)
-        {
-            if (id == null || _context.Grupos == null)
-            {
-                return NotFound();
-            }
-            var grupo = _context.Grupos.Include(g => g.Semestre).FirstOrDefault(g => g.SemestreID == id);
-
-            EditGrupoViewModel Model = _mapper.Map<EditGrupoViewModel>(grupo);
-            Model.Semestres = GetPeriodoSemestres();
-
-            return Ok(Model);
-        }
-
-            [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,SemestreID")] Grupo grupo)
+        public async Task<IActionResult> Edit([FromBody] EditGrupoViewModel Model)
         {
-            if (id != grupo.id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-
-
                 try
-                {
-                    _context.Update(grupo);
-                    await _context.SaveChangesAsync();
+                {   
+                    _gruposCommands.Update(Model);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GrupoExists(grupo.id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
                 return Ok();
             }
-
-            return NotFound();
-
+            return StatusCode(500);
         }
 
         // GET: Grupoes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null || _context.Grupos == null)
-            {
-                return NotFound();
-            }
 
-            var grupo = await _context.Grupos
-                .Include(g => g.Periodo)
-                .Include(g => g.PlanEstudio)
-                .Include(g => g.Semestre)
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (grupo == null)
-            {
-                return NotFound();
-            }
 
-            return View(grupo);
+            if (_gruposQueries.Find(id).Alumnos.Count > 0)
+                return Json(new { canBeDeleted = false });
+
+            return Json(new {canBeDeleted = true});
         }
 
         // POST: Grupoes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int Id)
         {
-            if (_context.Grupos == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Grupos'  is null.");
-            }
-            var grupo = await _context.Grupos.FindAsync(id);
-            if (grupo != null)
-            {
-                _context.Grupos.Remove(grupo);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if (_gruposQueries.Find(Id).Alumnos.Count > 0)
+                return BadRequest();
+
+            _gruposCommands.Delete(Id);
+
+            return Ok();
         }
 
-        private bool GrupoExists(int id)
-        {
-          return _context.Grupos.Any(e => e.id == id);
-        }
     }
 }

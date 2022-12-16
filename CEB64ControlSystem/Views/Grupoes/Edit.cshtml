@@ -1,25 +1,48 @@
 ﻿@using CEB64ControlSystem.ViewModels
-@model Grupo
+@using CEB64ControlSystem.ModelsDto
+
+@model GrupoDto
 
 
-<script>let Id = @Model.id</script>
-<div id="app">
+<form id="ForgeryKey">@Html.AntiForgeryToken()</form>
+
+<div >
     <h1 class="mb-2">1A <i class="fa-solid fa-user-group"></i></h1>
-    <section class="edit-section">
+    <section class="edit-section" id="app">
         <div>
             <h3 class="mb-2">Editar grupo</h3>
             <section class="row ">
                 <div class="w-50">
                     <label asp-for="Name" class="control-label"></label>
-                    <input class="form-control" v-model="Model.Name" />
-                    <span class="text-danger"></span>
+                    <input class="form-control" v-model="Model.name" />
+                    <span class="invalid-feedback invalid-feedback-show">
+                        {{NameValidation}}
+                    </span>
                 </div>
                 <div class="w-50">
-                    <label asp-for="SemestreID" class="control-label"></label>
-                    <select class="form-select" v-model="Model.SemestreID">
-                         <option v-for="Semestre in Model.Semestres" value="Semestre.Id">{{Semestre.Name}}</option>
+                    <label asp-for="Semestre.Name" class="control-label"></label>
+                    <select class="form-select" v-model="Model.semestreID">
+                         <option v-for="semestre in Model.semestres" :value="semestre.id">{{semestre.name}}</option>
                     </select>
-                    <span class="text-danger"></span>
+                    <span class="invalid-feedback invalid-feedback-show">
+                        {{SemestreValidation}}
+                    </span>
+                </div>
+            </section>
+            <section class="row">
+            </section>
+        </div>
+    </section>
+
+    <section class="edit-section" id="delete">
+        <div>
+            <h3 class="mb-2 text-danger">Borrar </h3>
+            <section class="row ">
+                <div class="w-50">
+                    <button :disabled="!canBeDeleted" class="btn btn-danger" @@click="deleteGrupo">Borrar grupo</button>
+                    <span v-show="!canBeDeleted" class="text-danger">
+                        El grupo no puede ser borrado ya que este aún tiene alumnos
+                    </span>
                 </div>
             </section>
             <section class="row">
@@ -30,6 +53,9 @@
 
 
 @section Scripts {
-
+    <script>
+        let Id = @Model.Id
+    </script>
     <script type="text/javascript" src="/js/Grupos/Edit.js" ></script>
+    <script type="text/javascript" src="/js/Grupos/delete.js"></script>
 }

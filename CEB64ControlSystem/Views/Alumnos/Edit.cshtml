@@ -1,0 +1,37 @@
+﻿@using CEB64ControlSystem.ViewModels
+@model Grupo
+
+
+@Html.AntiForgeryToken()
+<div id="app">
+    <h1 class="mb-2">1A <i class="fa-solid fa-user-group"></i></h1>
+    <section class="edit-section">
+        <div>
+            <h3 class="mb-2">Editar grupo</h3>
+            <section class="row ">
+                <div class="w-50">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input class="form-control" v-model="Model.name" />
+                    <span class="invalid-feedback invalid-feedback-show">{{NameValidation}}</span>
+                </div>
+                <div class="w-50">
+                    <label asp-for="SemestreID" class="control-label"></label>
+                    <select class="form-select" v-model="Model.semestreID">
+                         <option v-for="semestre in Model.semestres" :value="semestre.id">{{semestre.name}}</option>
+                    </select>
+                    <span class="invalid-feedback invalid-feedback-show">{{SemestreValidation}}</span>
+                </div>
+            </section>
+            <section class="row">
+            </section>
+        </div>
+    </section>
+</div>
+
+
+@section Scripts {
+    <script>
+        let Id = @Model.Id
+    </script>
+    <script type="text/javascript" src="/js/Grupos/Edit.js" ></script>
+}

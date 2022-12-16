@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CEB64ControlSystem.ModelsDto;
+using System.ComponentModel.DataAnnotations;
 
 namespace CEB64ControlSystem.AbstractModels
 {
-    public class PersonaContacto
+    public interface PersonaContacto 
     {
         [Display(Name = "Nombre")]
         public string Name { get; set; }
@@ -15,7 +16,7 @@ namespace CEB64ControlSystem.AbstractModels
         [Display(Name = "Número Telefónico")]
         public string NumeroTelefonico { get; set; }
         [Display(Name = "Correo")]
-        public string Mail;
+        public string Mail { get; set;}
 
     }
 }

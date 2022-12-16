@@ -8,5 +8,11 @@ namespace CEB64ControlSystem.Models
         public string Relacion { get; set; }
         public int AlumnoId { get; set; }
         public Alumno Alumno { get; set; }
+        public string Name { get; set; }
+        public string ApellidoPaterno { get; set; }
+        public string ApellidoMaterno { get; set; }
+        public string Direccion { get; set; }
+        public string NumeroTelefonico { get; set; }
+        public string Mail { get; set; }
     }
 }

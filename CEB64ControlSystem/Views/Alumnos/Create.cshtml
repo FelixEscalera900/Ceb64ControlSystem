@@ -1,26 +1,84 @@
 ﻿
-@using CEB64ControlSystem.ViewModels
-@model CreateGrupoViewModel
+@using CEB64ControlSystem.ViewModels;
+@using CEB64ControlSystem.ViewModels.Alumnos
+
+@model CreateAlumnoViewModel
 
 <h1>Crear Alumno</h1>
-<form asp-action="Create">
-    <section class="row ">
-        <div class="w-50">
+<form id="app" class="form">
+    @Html.AntiForgeryToken()
+    <section class="row">
+        <div class="col">
             <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+            <input v-model="model.Name" class="form-control" />
+            <span class="d-block invalid-feedback">{{validations.Name}}</span>
+        </div>
+        <div class="col">
+            <label asp-for="ApellidoPaterno" class="control-label"></label>
+            <input class="form-control" v-model="model.ApellidoPaterno" />
+            <span class="invalid-feedback d-block">{{validations.ApellidoPaterno}}</span>
         </div>
     </section>
     <section class="row">
-        <div class="w-50">
-            <label asp-for="SemestreID" class="control-label"></label>
-            <select class="form-select" asp-for="SemestreID" asp-items="Model.SemestresSelect">
-               @* <option value="">All</option>*@
+        <div class="col">
+            <label asp-for="ApellidoMaterno" class="control-label"></label>
+            <input v-model="model.ApellidoMaterno" class="form-control" />
+            <span class="invalid-feedback d-block">{{validations.ApellidoMaterno}}</span>
+        </div>
+        <div class="col">
+            <label asp-for="SemestreId" class="control-label"></label>
+            <select v-model = "model.SemestreId" class="form-select">
+                <option v-for = "semestre in semestres" :value="semestre.id">{{semestre.name}}</option>
             </select>
-            <span asp-validation-for="SemestreID" class="text-danger"></span>
+            <span class="invalid-feedback d-block">{{validations.SemestreId}}</span>
         </div>
     </section>
+    <section class="row">
+        <div class="col">
+            <label asp-for="GrupoId" class="control-label"></label>
+            <select :disabled="grupos.length == 0" v-model="model.GrupoId" class="form-select">
+                <option v-for="grupo in grupos" :value="grupo.id">{{grupo.name}}</option>
+            </select>
+            <span class="invalid-feedback d-block">{{validations.GrupoId}}</span>
+        </div>
+        <div class="col">
+            <label asp-for="FechaIngreso" class="control-label"></label>
+            <input type="date" v-model="model.FechaIngreso" class="form-control" />
+            <span class="invalid-feedback d-block">{{validations.FechaIngreso}}</span>
+        </div>
+    </section>
+    <section class="row">
+        <div class="col">
+            <label asp-for="Direccion" class="control-label"></label>
+            <input v-model="model.Direccion" class="form-control" />
+            <span class="invalid-feedback d-block">{{validations.Direccion}}</span>
+        </div>
+        <div class="col">
+            <label asp-for="FechaNacimiento" class="control-label"></label>
+            <input type="date" v-model="model.FechaNacimiento" class="form-control" />
+            <span class="invalid-feedback d-block">{{validations.FechaNacimiento}}</span>
+        </div>
+    </section>
+    <section class="row">
+        <div class="col">
+            <label asp-for="NumeroTelefonico" class="control-label"></label>
+            <input v-model="model.NumeroTelefonico" class="form-control" />
+            <span class="invalid-feedback d-block">{{validations.NumeroTelefonico}}</span>
+        </div>
+        <div class="col">
+            <label asp-for="Mail" class="control-label"></label>
+            <input v-model="model.Mail" class="form-control" />
+            <span class="invalid-feedback d-block">{{validations.Mail}}</span>
+        </div>
+    </section>
+
     <section class="mt-2">
-        <button class="btn btn-primary">Crear</button>
+        <button type="button" @@click="submit" class="btn btn-primary">Crear</button>
     </section>
 </form>
+@section Scripts
+    {
+    <script>let Id = @Model.Id</script>
+    <script type="text/javascript" src="/js/Common/ValidationRules.js"></script>
+    <script type="text/javascript" src="/js/Alumnos/Create.js"></script>
+}

@@ -7,7 +7,7 @@
     },
     mounted() {
         let scope = this
-        axios.get("Editdata/" + this.Id)
+        axios.get("/Grupoes/Editdata/" + this.Id)
             .then(response => {
                 scope.Model = response.data
             })
@@ -16,8 +16,8 @@
             })
     },
     methods: {
-        submit(route) {
-            axios.post(route, this.Model)
+        submit() {
+            axios.post("/Grupoes/Edit", this.Model, { headers: { RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val() }})
                 .then(() => {
                     Window.location = "/Home"
                 })
@@ -26,17 +26,17 @@
                 })
         }
     },
-    Computed: {
+    computed: {
         NameValidation: function () {
-            if (!this.Model.Name)
+            if (!this.Model.name)
                 return "Nombre inválido"
             
-            this.submit("Edit")
-            return ""
+            this.submit()
+
         },
-        NameValidation: function () {
-            if (this.Model.SemestreId)
-                this.submit("Edit")
+        SemestreValidation: function () {
+            if (this.Model.semestreId)
+                this.submit()
         }
     }
 

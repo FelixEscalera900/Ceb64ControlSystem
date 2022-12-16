@@ -3,11 +3,12 @@
 @model GrupoDto
 
 <section class="entity-details-section">
+
     <div class="entity-details">
         <section class="border-bottom">
             <h4>@Model.Name</h4>
             <div >
-                <a href="/Grupoes/Edit/@Model.id" class="btn btn-basic">Editar Grupo</a>
+                <a href="/Grupoes/Edit/@Model.Id" class="btn btn-basic">Editar Grupo</a>
             </div>
         </section>
         <div class="pt-3">
@@ -57,7 +58,6 @@
           </div>
 
           <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="d-flex justify-content-end"><button class="btn btn-yellow">Asignar profesor</button></div>
             <table class="table table-hover table-entity secondary-props-table">
                 <thead>
                     <tr>

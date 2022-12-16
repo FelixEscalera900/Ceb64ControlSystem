@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CEB64ControlSystem.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace CEB64ControlSystem.Models
 {

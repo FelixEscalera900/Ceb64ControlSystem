@@ -1,16 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CEB64ControlSystem.Models.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace CEB64ControlSystem.Models
 {
-    public class Grupo
+    public class Grupo : KeyedEntity
     {
-        public int id { get; set; }
         public int PeriodoId { get; set; }
         public Periodo? Periodo { get; set; }
-        
         [Display(Name = "Grupo")] 
-        [Required]
         public string Name { get; set; }
         public List<Asignatura>? Asignaturas { get; set; }
         public List<Alumno>? Alumnos { get; set; }

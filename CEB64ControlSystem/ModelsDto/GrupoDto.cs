@@ -3,32 +3,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CEB64ControlSystem.ModelsDto
 {
-    public class GrupoDto
+    public class GrupoDto :  KeyedDto
     {
-        public int id { get; set; }
+        [Required]
+        public int Id { get; set; }
         public int PeriodoId { get; set; }
-        public Periodo Periodo { get; set; }
+        public Periodo? Periodo { get; set; }
+        public List<Asignatura>? Asignaturas { get; set; }
+
         [Display(Name = "Grupo")]
+        [Required]
         public string Name { get; set; }
-        public List<Asignatura> Asignaturas { get; set; }
-        public List<AlumnoDto> Alumnos { get; set; }
+        [Display(Name = "Semestre")]
+        [Required]
         public int SemestreID { get; set; }
-        public Semestre Semestre { get; set; }
-        public PlanEstudio PlanEstudio { get; set; }
+        public Semestre? Semestre { get; set; }
+        public PlanEstudio? PlanEstudio { get; set; }
         public int? PlanEstudioId { get; set; }
-        public List<AlumnoDto> OrderedAlumnos
-        {
-            get
-            {
-                return Alumnos.OrderBy(a => a.ApellidoPaterno).ToList();
-            }
-        }
-        public int NumeroAlumnos
-        {
-            get
-            {
-                return Alumnos.Count;
-            }
-        }
+        public List<AlumnoDto>? Alumnos { get; set; }
+        [Display(Name = "#Alumnos")]
+        public string? NumeroAlumnos { get; set; }
+
     }
 }

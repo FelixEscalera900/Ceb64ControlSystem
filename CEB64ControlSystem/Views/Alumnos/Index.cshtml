@@ -1,32 +1,42 @@
-﻿@using CEB64ControlSystem.ModelsDto
-@model List<GrupoDto>
+﻿@using CEB64ControlSystem.ViewModels.Alumnos
+@using CEB64ControlSystem.ModelsDto
 
-<section class="default-main-container">
-    <h1>Grupos</h1>
-    <div class="d-flex justify-content-end">
-        <a href=~/Grupoes/Create class="btn btn-yellow">Agregar Grupo</a>
+@model AlumnosListViewModel
+
+@{
+    Layout = "EntityIndexList";
+}
+
+@section Filters 
+{
+    <div class="col-sm-2 pe-2">
+        <input autocomplete="off" asp-for="Filters.Name" placeholder="Nombre" class="form-control" onchange="this.form.submit()" />
     </div>
-    <table class="table table-hover table-entity">
-        <thead>
-            <tr>
-                <th class="text-dark">Nombre</th>
-                <th>Semestre</th>
-                <th>Periodo</th>
-                <th>#Alumnos</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach(GrupoDto grupo in Model)
-        {   
-            <tr onclick="gotoEntityDetails(@grupo.id)">
-                <td>@grupo.Name</td>
-                <td>@grupo.Semestre.Name</td>
-                <td>@grupo.Periodo.Name</td>
-                <td>@grupo.Alumnos.Count</td>
-            </tr>
+    <div class="col-sm-2 pe-2">
+        <select asp-for="Filters.SemestreId" onchange="this.form.submit()" class="form-select">
+            <option value="null">Todos los semestres</option>
+            @foreach(Semestre semsetre in Model.Semestres)
+            {
+                <option value="@semsetre.Id" onchange="this.form.submit()">@semsetre.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-sm-2 pe-2">
+        @if(Model.Grupos.Any()){
+            <select asp-for="Filters.GrupoId" onchange="this.form.submit()" class="form-select">
+                <option value="null">Todos los Grupos</option>
+                @foreach (GrupoDto Grupo in Model.Grupos)
+                {
+                    <option value="@Grupo.Id" onchange="this.form.submit()">@Grupo.Name</option>
+                }
+            </select>
         }
-        </tbody>
-    </table>
-
-</section>
+        else
+        {
+            <select disabled class="form-select">
+                <option value="null">Todos los Grupos</option>
+            </select>
+        }
+    </div>
+}
 

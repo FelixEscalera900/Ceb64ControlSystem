@@ -1,0 +1,57 @@
+﻿@using CEB64ControlSystem.ViewModels
+@using CEB64ControlSystem.ModelsDto
+
+@model IdentityListViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<section class="default-main-container">
+    <h1>@Model.PluralName</h1>
+    <section>
+    <div class="d-flex justify-content-between">
+        <form class="generic-section flex-fill" asp-action="Index">
+            <section class="row g-0">
+                @await RenderSectionAsync("Filters", required: true)
+            </section>
+        </form>
+        <a href="@Model.CreationRoute"  class="btn btn-yellow">Agregar @Model.SingularName</a>
+    </div>
+    <table id="sortTable" class="table table-hover table-entity mt-2 ">
+        <thead>
+            <tr>
+                @foreach (string title in Model.Titles)
+                {
+                    <th class="border-top">@title</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(Row row in Model.DataTable)
+        {   
+            <tr onclick="gotoEntityDetails( @row.Id )">
+            @foreach (string cell in row.Data)
+            {
+                <td class="bg-white">@cell</td>            
+            }
+            </tr>
+        }
+        </tbody>
+    </table>
+    </section>
+</section>
+
+@section Styles 
+{
+    <link rel="stylesheet" href="~/css/datatables.min.css"/>
+}
+
+@section Scripts 
+{
+    <script src="~/js/datatables.min.js"></script>
+    <script>
+        $('#sortTable').DataTable({searching: false, paging: false, info: false});
+    </script>
+}
+

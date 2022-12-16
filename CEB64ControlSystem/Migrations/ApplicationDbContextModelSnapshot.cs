@@ -54,8 +54,12 @@ namespace CEB64ControlSystem.Migrations
                     b.Property<int?>("GrupoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdEstado")
+                    b.Property<int>("IdEstado")
                         .HasColumnType("int");
+
+                    b.Property<string>("Mail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -66,6 +70,9 @@ namespace CEB64ControlSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SemestreId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sexo")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -99,6 +106,10 @@ namespace CEB64ControlSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Mail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -258,11 +269,11 @@ namespace CEB64ControlSystem.Migrations
 
             modelBuilder.Entity("CEB64ControlSystem.Models.Grupo", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -277,7 +288,7 @@ namespace CEB64ControlSystem.Migrations
                     b.Property<int>("SemestreID")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.HasIndex("PeriodoId");
 
@@ -473,6 +484,10 @@ namespace CEB64ControlSystem.Migrations
 
                     b.Property<DateTime>("FechaNacimiento")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Mail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -768,7 +783,8 @@ namespace CEB64ControlSystem.Migrations
                     b.HasOne("CEB64ControlSystem.Models.AlumnoEstado", "Estado")
                         .WithMany("Alumnos")
                         .HasForeignKey("IdEstado")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("CEB64ControlSystem.Models.Semestre", "Semestre")
                         .WithMany("Alumnos")
